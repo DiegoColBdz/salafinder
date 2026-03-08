@@ -5,6 +5,7 @@ import Layout from './components/layout/Layout'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import SpacesPage from './pages/SpacesPage'
+import SpaceDetailPage from './pages/SpaceDetailPage'
 
 function PrivateRoute({ children }) {
     const { state } = useApp()
@@ -26,6 +27,8 @@ export default function App() {
                 <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
                     <Route index element={<Navigate to="/espacios" replace />} />
                     <Route path="/espacios" element={<SpacesPage />} />
+                    <Route path="/espacios/:id" element={<SpaceDetailPage />} />
+                    {/* Próximas rutas aquí */}
                 </Route>
                 <Route path="*" element={<Navigate to="/espacios" replace />} />
             </Routes>
