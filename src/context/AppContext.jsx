@@ -77,6 +77,12 @@ function appReducer(state, action) {
     case 'CLEAR_NOTIFICATION':
       return { ...state, notification: null }
 
+    case 'SET_SPACES':
+      return { ...state, spaces: action.payload }
+
+    case 'SET_RESERVATIONS':
+      return { ...state, reservations: action.payload }
+
     default:
       return state
   }
