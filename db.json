@@ -6,8 +6,15 @@
       "type": "laboratorio",
       "capacity": 30,
       "building": "Bloque 7",
-      "resources": ["proyector", "computadores", "aire acondicionado"],
-      "allowedPrograms": ["Ingeniería de Sistemas", "Ingeniería Web"],
+      "resources": [
+        "proyector",
+        "computadores",
+        "aire acondicionado"
+      ],
+      "allowedPrograms": [
+        "Ingeniería de Sistemas",
+        "Ingeniería Web"
+      ],
       "requiresApproval": false,
       "description": "Laboratorio con 30 computadores de alto rendimiento."
     },
@@ -17,7 +24,11 @@
       "type": "sala",
       "capacity": 12,
       "building": "Bloque 2",
-      "resources": ["proyector", "videoconferencia", "pizarrón"],
+      "resources": [
+        "proyector",
+        "videoconferencia",
+        "pizarrón"
+      ],
       "allowedPrograms": [],
       "requiresApproval": true,
       "description": "Sala ejecutiva para reuniones pequeñas y videoconferencias."
@@ -28,7 +39,10 @@
       "type": "cancha",
       "capacity": 20,
       "building": "Zona Deportiva",
-      "resources": ["balones", "iluminación nocturna"],
+      "resources": [
+        "balones",
+        "iluminación nocturna"
+      ],
       "allowedPrograms": [],
       "requiresApproval": false,
       "description": "Cancha polideportiva con superficie sintética."
@@ -39,7 +53,11 @@
       "type": "auditorio",
       "capacity": 200,
       "building": "Bloque Central",
-      "resources": ["proyector HD", "sistema de sonido", "aire acondicionado"],
+      "resources": [
+        "proyector HD",
+        "sistema de sonido",
+        "aire acondicionado"
+      ],
       "allowedPrograms": [],
       "requiresApproval": true,
       "description": "Auditorio para 200 personas, ideal para eventos y conferencias."
@@ -50,8 +68,14 @@
       "type": "laboratorio",
       "capacity": 24,
       "building": "Bloque 4",
-      "resources": ["osciloscopios", "fuentes de poder", "multímetros"],
-      "allowedPrograms": ["Ingeniería Electrónica"],
+      "resources": [
+        "osciloscopios",
+        "fuentes de poder",
+        "multímetros"
+      ],
+      "allowedPrograms": [
+        "Ingeniería Electrónica"
+      ],
       "requiresApproval": false,
       "description": "Laboratorio con equipos de instrumentación electrónica."
     },
@@ -61,7 +85,10 @@
       "type": "sala",
       "capacity": 8,
       "building": "Biblioteca",
-      "resources": ["pizarrón", "TV 55\""],
+      "resources": [
+        "pizarrón",
+        "TV 55\""
+      ],
       "allowedPrograms": [],
       "requiresApproval": false,
       "description": "Sala silenciosa para grupos de estudio pequeños."
@@ -103,6 +130,90 @@
       "attendeeCount": 14,
       "status": "approved",
       "createdAt": "2026-03-01T12:00:00.000Z"
+    },
+    {
+      "id": "20a4",
+      "spaceId": "sp-04",
+      "userId": "u-001",
+      "date": "2026-03-16",
+      "startTime": "08:00",
+      "endTime": "10:00",
+      "purpose": "lhlahgalhga",
+      "attendeeCount": 13,
+      "status": "pending",
+      "createdAt": "2026-03-14T23:28:23.297Z"
+    },
+    {
+      "id": "889a",
+      "spaceId": "sp-06",
+      "userId": "u-001",
+      "date": "2026-03-14",
+      "startTime": "20:00",
+      "endTime": "22:00",
+      "purpose": "ejemplo sala",
+      "attendeeCount": 3,
+      "status": "approved",
+      "createdAt": "2026-03-14T23:29:35.529Z"
+    },
+    {
+      "id": "4c16",
+      "spaceId": "sp-03",
+      "userId": "u-001",
+      "date": "2026-03-14",
+      "startTime": "20:00",
+      "endTime": "22:00",
+      "purpose": "lajflajflaf",
+      "attendeeCount": 11,
+      "status": "approved",
+      "createdAt": "2026-03-14T23:30:21.366Z"
+    },
+    {
+      "id": "80b4",
+      "spaceId": "sp-03",
+      "userId": "u-001",
+      "date": "2026-03-14",
+      "startTime": "19:40",
+      "endTime": "19:50",
+      "purpose": "agagagagag",
+      "attendeeCount": 11,
+      "status": "approved",
+      "createdAt": "2026-03-14T23:32:58.074Z"
+    },
+    {
+      "id": "10b3",
+      "spaceId": "sp-01",
+      "userId": "u-001",
+      "date": "2026-03-14",
+      "startTime": "19:50",
+      "endTime": "19:55",
+      "purpose": "ljlafjafl",
+      "attendeeCount": 14,
+      "status": "approved",
+      "createdAt": "2026-03-14T23:41:25.928Z"
+    },
+    {
+      "id": "a2bd",
+      "spaceId": "sp-05",
+      "userId": "u-001",
+      "date": "2026-03-14",
+      "startTime": "19:50",
+      "endTime": "22:00",
+      "purpose": ";jagaga",
+      "attendeeCount": 3,
+      "status": "approved",
+      "createdAt": "2026-03-14T23:43:24.740Z"
+    },
+    {
+      "id": "1c25",
+      "spaceId": "sp-02",
+      "userId": "u-001",
+      "date": "2026-03-14",
+      "startTime": "20:00",
+      "endTime": "22:00",
+      "purpose": "lajgljaglagag",
+      "attendeeCount": 11,
+      "status": "pending",
+      "createdAt": "2026-03-14T23:45:34.823Z"
     }
   ],
   "users": [
@@ -132,6 +243,16 @@
       "role": "admin",
       "noShows": 0,
       "blockedUntil": null
+    },
+    {
+      "id": "u-004",
+      "name": "Diego Collazos",
+      "email": "diego.collazos@uni.edu",
+      "password": "123456",
+      "role": "student",
+      "noShows": 2,
+      "blockedUntil": null
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
