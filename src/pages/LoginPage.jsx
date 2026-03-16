@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
+import { getUserByEmail } from '../services/api'
 
 export default function LoginPage() {
   const { dispatch } = useApp()
@@ -8,6 +9,7 @@ export default function LoginPage() {
   const [form, setForm] = useState({ email: '', password: '' })
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
+  const [serverError, setServerError] = useState('')
 
   const validate = () => {
     const e = {}
@@ -22,10 +24,21 @@ export default function LoginPage() {
     const e = validate()
     if (Object.keys(e).length) return setErrors(e)
     setLoading(true)
-    await new Promise(r => setTimeout(r, 600))
-    dispatch({ type: 'LOGIN', payload: form })
-    setLoading(false)
-    navigate('/espacios')
+    setServerError('')
+    try {
+      const user = await getUserByEmail(form.email)
+      if (!user || user.password !== form.password) {
+        setServerError('Correo o contraseña incorrectos.')
+        return
+      }
+      localStorage.setItem('sf_user', JSON.stringify(user))
+      dispatch({ type: 'LOGIN_SUCCESS', payload: user })
+      navigate('/espacios')
+    } catch {
+      setServerError('No se pudo conectar al servidor. Verifica que JSON Server esté corriendo.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -41,28 +54,47 @@ export default function LoginPage() {
 
         <div className="card p-7 shadow-modal">
           <h2 className="font-display font-bold text-xl text-gray-900 mb-6">Iniciar sesión</h2>
+
+          {/* Error de servidor */}
+          {serverError && (
+            <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3 mb-4 text-sm text-red-700 animate-slide-up">
+              {serverError}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} noValidate className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5" htmlFor="email">Correo institucional</label>
-              <input id="email" type="email" placeholder="usuario@uni.edu" value={form.email}
+              <label className="block text-sm font-medium text-gray-700 mb-1.5" htmlFor="email">
+                Correo institucional
+              </label>
+              <input id="email" type="email" placeholder="usuario@uni.edu"
+                value={form.email} autoComplete="email"
                 onChange={e => { setForm(f => ({ ...f, email: e.target.value })); setErrors(er => ({ ...er, email: '' })) }}
                 className={`input-field ${errors.email ? 'input-error' : ''}`} />
               {errors.email && <p className="text-xs text-red-600 mt-1">{errors.email}</p>}
             </div>
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5" htmlFor="password">Contraseña</label>
-              <input id="password" type="password" placeholder="••••••••" value={form.password}
+              <label className="block text-sm font-medium text-gray-700 mb-1.5" htmlFor="password">
+                Contraseña
+              </label>
+              <input id="password" type="password" placeholder="••••••••"
+                value={form.password} autoComplete="current-password"
                 onChange={e => { setForm(f => ({ ...f, password: e.target.value })); setErrors(er => ({ ...er, password: '' })) }}
                 className={`input-field ${errors.password ? 'input-error' : ''}`} />
               {errors.password && <p className="text-xs text-red-600 mt-1">{errors.password}</p>}
             </div>
+
             <button type="submit" className="btn-primary w-full mt-2" disabled={loading}>
               {loading ? 'Verificando...' : 'Ingresar'}
             </button>
           </form>
+
           <p className="text-center text-sm text-gray-500 mt-5">
             ¿No tienes cuenta?{' '}
-            <Link to="/registro" className="text-brand-600 font-medium hover:underline">Regístrate aquí</Link>
+            <Link to="/registro" className="text-brand-600 font-medium hover:underline">
+              Regístrate aquí
+            </Link>
           </p>
         </div>
 
@@ -70,9 +102,9 @@ export default function LoginPage() {
         <div className="mt-4 card p-4 bg-white/5 border-white/10">
           <p className="text-xs text-brand-300 font-medium mb-2">Cuentas de prueba:</p>
           {[
-            { label: 'Estudiante', email: 'ana.garcia@uni.edu', pw: '123456' },
-            { label: 'Docente', email: 'carlos.mora@uni.edu', pw: '123456' },
-            { label: 'Admin', email: 'admin@uni.edu', pw: 'admin123' },
+            { label: 'Estudiante', email: 'ana.garcia@uni.edu',   pw: '123456'   },
+            { label: 'Docente',    email: 'carlos.mora@uni.edu',  pw: '123456'   },
+            { label: 'Admin',      email: 'admin@uni.edu',        pw: 'admin123' },
           ].map(u => (
             <button key={u.email} type="button"
               onClick={() => setForm({ email: u.email, password: u.pw })}
