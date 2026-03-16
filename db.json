@@ -128,7 +128,7 @@
       "endTime": "18:00",
       "purpose": "Entrenamiento de fútbol",
       "attendeeCount": 14,
-      "status": "approved",
+      "status": "cancelled",
       "createdAt": "2026-03-01T12:00:00.000Z"
     },
     {
@@ -140,7 +140,7 @@
       "endTime": "10:00",
       "purpose": "lhlahgalhga",
       "attendeeCount": 13,
-      "status": "pending",
+      "status": "approved",
       "createdAt": "2026-03-14T23:28:23.297Z"
     },
     {
@@ -212,8 +212,20 @@
       "endTime": "22:00",
       "purpose": "lajgljaglagag",
       "attendeeCount": 11,
-      "status": "pending",
+      "status": "approved",
       "createdAt": "2026-03-14T23:45:34.823Z"
+    },
+    {
+      "id": "ad19",
+      "spaceId": "sp-03",
+      "userId": "u-001",
+      "date": "2026-03-16",
+      "startTime": "10:00",
+      "endTime": "12:00",
+      "purpose": "jueguito",
+      "attendeeCount": 10,
+      "status": "approved",
+      "createdAt": "2026-03-15T23:53:38.997Z"
     }
   ],
   "users": [
@@ -251,8 +263,8 @@
       "password": "123456",
       "role": "student",
       "noShows": 2,
-      "blockedUntil": null
+      "blockedUntil": "2026-12-31T00:00:00.000Z"
     }
   ],
-  "$schema": "./node_modules/json-server/schema.json"
+  "$schema": ["./node_modules/json-server/schema.json"]
 }

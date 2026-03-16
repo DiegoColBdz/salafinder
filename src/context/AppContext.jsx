@@ -17,14 +17,14 @@ function getInitialState() {
 function appReducer(state, action) {
     switch (action.type) {
 
-        case 'LOGIN': {
-            const user = state.users.find(
-                u => u.email === action.payload.email && u.password === action.payload.password
-            )
-            if (!user) return { ...state, notification: { type: 'error', message: 'Correo o contraseña incorrectos.' } }
-            localStorage.setItem('sf_user', JSON.stringify(user))
-            return { ...state, currentUser: user, notification: { type: 'success', message: `Bienvenido, ${user.name}!` } }
+        case 'LOGIN_SUCCESS': {
+            localStorage.setItem('sf_user', JSON.stringify(action.payload))
+            return {
+                ...state,
+                currentUser: action.payload,
+                notification: { type: 'success', message: `Bienvenido, ${action.payload.name}!` }
         }
+    }
 
         case 'REGISTER': {
             const exists = state.users.find(u => u.email === action.payload.email)

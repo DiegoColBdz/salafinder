@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import ReservationCard from '../components/reservations/ReservationCard'
-import { EmptyState } from '../components/ui/index.jsx'
+import { EmptyState } from '../components/ui/Index.jsx'
 
 const TABS = [
     { key: 'all', label: 'Todas' },
