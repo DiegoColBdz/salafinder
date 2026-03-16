@@ -226,6 +226,42 @@
       "attendeeCount": 10,
       "status": "approved",
       "createdAt": "2026-03-15T23:53:38.997Z"
+    },
+    {
+      "id": "5fb2",
+      "spaceId": "sp-02",
+      "userId": "u-001",
+      "date": "2026-03-16",
+      "startTime": "20:30",
+      "endTime": "22:00",
+      "purpose": "ejemplo cancelar",
+      "attendeeCount": 11,
+      "status": "cancelled",
+      "createdAt": "2026-03-16T00:20:39.630Z"
+    },
+    {
+      "id": "1572",
+      "spaceId": "sp-02",
+      "userId": "u-001",
+      "date": "2026-03-16",
+      "startTime": "20:30",
+      "endTime": "22:00",
+      "purpose": "ejemplo ejemplo ejemplo ejemplo ejemplo ",
+      "attendeeCount": 2,
+      "status": "pending",
+      "createdAt": "2026-03-16T00:21:19.037Z"
+    },
+    {
+      "id": "c3f6",
+      "spaceId": "sp-05",
+      "userId": "u-001",
+      "date": "2026-03-16",
+      "startTime": "20:30",
+      "endTime": "22:00",
+      "purpose": "ejemplo ejemplo ejemplo ",
+      "attendeeCount": 2,
+      "status": "approved",
+      "createdAt": "2026-03-16T00:23:29.938Z"
     }
   ],
   "users": [
@@ -266,5 +302,5 @@
       "blockedUntil": "2026-12-31T00:00:00.000Z"
     }
   ],
-  "$schema": ["./node_modules/json-server/schema.json"]
+  "$schema": "./node_modules/json-server/schema.json"
 }
