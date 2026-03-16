@@ -89,3 +89,18 @@ export const USERS_INITIAL = [
 ]
 
 export const SPACE_TYPES = ['laboratorio', 'sala', 'cancha', 'auditorio']
+
+export const RESOURCES_LIST = [
+  'proyector',
+  'computadores',
+  'aire acondicionado',
+  'videoconferencia',
+  'pizarrón',
+  'sistema de sonido',
+  'balones',
+  'iluminación nocturna',
+  'osciloscopios',
+  'fuentes de poder',
+  'multímetros',
+  'TV 55"',
+]

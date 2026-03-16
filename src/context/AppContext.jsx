@@ -95,6 +95,22 @@ function appReducer(state, action) {
         case 'SET_NOTIFICATION':
             return { ...state, notification: action.payload }
 
+        case 'ADD_SPACE': {
+            return { ...state, spaces: [...state.spaces, action.payload] }
+        }
+
+        case 'UPDATE_SPACE': {
+            const updated = state.spaces.map(s =>
+                s.id === action.payload.id ? action.payload : s
+            )
+            return { ...state, spaces: updated }
+        }
+
+        case 'DELETE_SPACE': {
+            const updated = state.spaces.filter(s => s.id !== action.payload)
+            return { ...state, spaces: updated }
+        }
+
         default:
             return state
     }

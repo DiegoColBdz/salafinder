@@ -76,3 +76,31 @@ export async function updateUser(id, data) {
   if (!res.ok) throw new Error('Error al actualizar el usuario')
   return res.json()
 }
+
+// Funciones del Admin 
+
+export async function createSpace(data) {
+  const res = await fetch(`${BASE_URL}/spaces`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  if (!res.ok) throw new Error('Error al crear el espacio')
+  return res.json()
+}
+
+export async function updateSpace(id, data) {
+  const res = await fetch(`${BASE_URL}/spaces/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  if (!res.ok) throw new Error('Error al actualizar el espacio')
+  return res.json()
+}
+
+export async function deleteSpace(id) {
+  const res = await fetch(`${BASE_URL}/spaces/${id}`, { method: 'DELETE' })
+  if (!res.ok) throw new Error('Error al eliminar el espacio')
+  return true
+}

@@ -264,6 +264,7 @@
       "createdAt": "2026-03-16T00:23:29.938Z"
     },
     {
+<<<<<<< HEAD
       "id": "d6fa",
       "spaceId": "sp-01",
       "userId": "u-001",
@@ -274,6 +275,18 @@
       "attendeeCount": 2,
       "status": "approved",
       "createdAt": "2026-03-16T20:05:21.446Z"
+=======
+      "id": "c0b6",
+      "spaceId": "sp-03",
+      "userId": "u-001",
+      "date": "2026-03-17",
+      "startTime": "08:00",
+      "endTime": "10:00",
+      "purpose": " prueba prueba prueba prueba",
+      "attendeeCount": 10,
+      "status": "approved",
+      "createdAt": "2026-03-16T20:05:41.515Z"
+>>>>>>> 36e511bf8c71f0d0fd70dffacd433a031d1a5847
     }
   ],
   "users": [
