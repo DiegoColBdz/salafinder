@@ -21,8 +21,9 @@ export default function Layout() {
     }
 
     const navItems = [
-        { to: '/espacios', label: 'Espacios' },
-        { to: '/mis-reservas', label: 'Mis Reservas' },
+        { to: '/espacios', label: 'Espacios', icon: '' },
+        { to: '/calendario', label: 'Calendario', icon: '' },
+        { to: '/mis-reservas', label: 'Mis Reservas', icon: '' },
         ...(user?.role === 'admin' ? [{ to: '/admin', label: 'Panel Admin', icon: '' }] : []),
     ]
 
