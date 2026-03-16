@@ -11,7 +11,8 @@ pueden aprobar o rechazar solicitudes desde un panel dedicado (`/admin`).
 1. `git clone https://github.com/DiegoColBdz/salafinder.git`
 2. `cd salafinder`
 3. `npm install`
-4. Ir a `http://localhost:5173`
+4. `npm run server` y `npm run dev`
+5. Ir a `http://localhost:5173`
 
 ## Integrantes
 - Diego Collazos Bermudez
