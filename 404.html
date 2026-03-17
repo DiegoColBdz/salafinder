@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>SalaFinder</title>
+    <script>
+      var path = window.location.pathname;
+      var query = window.location.search;
+      var hash = window.location.hash;
+      var base = '/salafinder';
+      var rest = path.replace(base, '');
+      window.location.replace(
+        base + '/?redirect=' + encodeURIComponent(rest + query + hash)
+      );
+    </script>
+  </head>
+</html>
