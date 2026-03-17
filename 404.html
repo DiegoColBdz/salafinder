@@ -4,14 +4,11 @@
     <meta charset="utf-8" />
     <title>SalaFinder</title>
     <script>
-      var path = window.location.pathname;
-      var query = window.location.search;
-      var hash = window.location.hash;
-      var base = '/salafinder';
-      var rest = path.replace(base, '');
-      window.location.replace(
-        base + '/?redirect=' + encodeURIComponent(rest + query + hash)
+      sessionStorage.setItem(
+        'redirect',
+        window.location.pathname + window.location.search + window.location.hash
       );
+      window.location.replace('/salafinder/');
     </script>
   </head>
 </html>
