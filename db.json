@@ -248,7 +248,7 @@
       "endTime": "22:00",
       "purpose": "ejemplo ejemplo ejemplo ejemplo ejemplo ",
       "attendeeCount": 2,
-      "status": "pending",
+      "status": "approved",
       "createdAt": "2026-03-16T00:21:19.037Z"
     },
     {
@@ -272,8 +272,10 @@
       "endTime": "17:00",
       "purpose": "lhalghalhgalhga",
       "attendeeCount": 2,
-      "status": "approved",
-      "createdAt": "2026-03-16T20:05:21.446Z",
+      "status": "cancelled",
+      "createdAt": "2026-03-16T20:05:21.446Z"
+    },
+    {
       "id": "c0b6",
       "spaceId": "sp-03",
       "userId": "u-001",
@@ -284,6 +286,18 @@
       "attendeeCount": 10,
       "status": "approved",
       "createdAt": "2026-03-16T20:05:41.515Z"
+    },
+    {
+      "id": "a51e",
+      "spaceId": "sp-03",
+      "userId": "u-001",
+      "date": "2026-03-18",
+      "startTime": "10:00",
+      "endTime": "12:00",
+      "purpose": "entreno entreno entreno",
+      "attendeeCount": 10,
+      "status": "approved",
+      "createdAt": "2026-03-17T23:30:22.317Z"
     }
   ],
   "users": [
@@ -322,6 +336,24 @@
       "role": "student",
       "noShows": 2,
       "blockedUntil": "2026-12-31T00:00:00.000Z"
+    },
+    {
+      "id": "u-1773790291614",
+      "name": "Samuel Corrales",
+      "email": "samuel.corrales@uni.edu",
+      "password": "1234567",
+      "role": "student",
+      "noShows": 0,
+      "blockedUntil": null
+    },
+    {
+      "id": "u-1773845247077",
+      "name": "Silvia Suarez",
+      "email": "silvia@uni.edu",
+      "password": "123456789",
+      "role": "student",
+      "noShows": 0,
+      "blockedUntil": null
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
