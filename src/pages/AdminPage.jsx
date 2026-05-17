@@ -14,17 +14,30 @@ import {
 const TABS = ['reservas', 'espacios', 'usuarios']
 const TAB_LABELS = { reservas: '📅 Reservas', espacios: '🏢 Espacios', usuarios: '👥 Usuarios' }
 
+const ROLE_COLORS = {
+  Student: 'bg-blue-100 text-blue-700',
+  Staff:   'bg-emerald-100 text-emerald-700',
+  Admin:   'bg-violet-100 text-violet-700',
+}
+const ROLE_LABELS = { Student: 'Estudiante', Staff: 'Docente', Admin: 'Admin' }
+
+const ESTADO_MAP = {
+  Pendiente: 'pending',
+  Aprobado:  'approved',
+  Rechazado: 'rejected',
+  Cancelado: 'cancelled',
+}
+
 export default function AdminPage() {
   const { state, dispatch } = useApp()
-  const [tab, setTab]             = useState('reservas')
-  const [resTab, setResTab]       = useState('pending')
-  const [loading, setLoading]     = useState(true)
-  const [users, setUsers]         = useState([])
+  const [tab, setTab]           = useState('reservas')
+  const [resTab, setResTab]     = useState('Pendiente')
+  const [loading, setLoading]   = useState(true)
+  const [users, setUsers]       = useState([])
   const [formLoading, setFormLoading] = useState(false)
 
-  // Modales
-  const [showCreate, setShowCreate]   = useState(false)
-  const [editSpace, setEditSpace]     = useState(null)
+  const [showCreate, setShowCreate]     = useState(false)
+  const [editSpace, setEditSpace]       = useState(null)
   const [deleteTarget, setDeleteTarget] = useState(null)
 
   useEffect(() => {
@@ -40,22 +53,25 @@ export default function AdminPage() {
       .finally(() => setLoading(false))
   }, [])
 
-  // ── Reservas ────────────────────────────────────────────────────────────────
-  const handleReservationAction = async (id, status) => {
+  // ── Reservas ──────────────────────────────────────────────────────────────
+  const handleReservationAction = async (id, nuevoEstado) => {
     try {
-      await updateReservation(id, { status })
-      dispatch({ type: status === 'approved' ? 'APPROVE_RESERVATION' : 'REJECT_RESERVATION', payload: id })
+      await updateReservation(id, { estado: nuevoEstado })
+      dispatch({
+        type: nuevoEstado === 'Aprobado' ? 'APPROVE_RESERVATION' : 'REJECT_RESERVATION',
+        payload: id
+      })
+      dispatch({ type: 'SET_NOTIFICATION', payload: { type: 'success', message: `Reserva ${nuevoEstado.toLowerCase()}.` } })
     } catch {
       dispatch({ type: 'SET_NOTIFICATION', payload: { type: 'error', message: 'Error al actualizar la reserva.' } })
     }
   }
 
-  // ── Espacios ────────────────────────────────────────────────────────────────
+  // ── Espacios ──────────────────────────────────────────────────────────────
   const handleCreateSpace = async (data) => {
     setFormLoading(true)
     try {
-      const newSpace = { ...data, id: `sp-${Date.now()}` }
-      const saved = await createSpace(newSpace)
+      const saved = await createSpace(data)
       dispatch({ type: 'ADD_SPACE', payload: saved })
       dispatch({ type: 'SET_NOTIFICATION', payload: { type: 'success', message: 'Espacio creado exitosamente.' } })
       setShowCreate(false)
@@ -86,27 +102,21 @@ export default function AdminPage() {
       dispatch({ type: 'DELETE_SPACE', payload: deleteTarget.id })
       dispatch({ type: 'SET_NOTIFICATION', payload: { type: 'info', message: 'Espacio eliminado.' } })
       setDeleteTarget(null)
-    } catch {
-      dispatch({ type: 'SET_NOTIFICATION', payload: { type: 'error', message: 'Error al eliminar el espacio.' } })
+    } catch (err) {
+      dispatch({ type: 'SET_NOTIFICATION', payload: { type: 'error', message: err.message } })
     }
   }
 
+  // Filtrar reservas según el tab usando campos del backend
   const reservations = state.reservations
-    .filter(r => resTab === 'all' || r.status === resTab)
-    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    .filter(r => resTab === 'all' || r.estado === resTab)
+    .sort((a, b) => new Date(b.creado_en) - new Date(a.creado_en))
 
   const stats = {
-    pending:  state.reservations.filter(r => r.status === 'pending').length,
-    approved: state.reservations.filter(r => r.status === 'approved').length,
+    pending:  state.reservations.filter(r => r.estado === 'Pendiente').length,
+    approved: state.reservations.filter(r => r.estado === 'Aprobado').length,
     total:    state.reservations.length,
   }
-
-  const ROLE_COLORS = {
-    student: 'bg-blue-100 text-blue-700',
-    staff:   'bg-emerald-100 text-emerald-700',
-    admin:   'bg-violet-100 text-violet-700',
-  }
-  const ROLE_LABELS = { student: 'Estudiante', staff: 'Docente', admin: 'Admin' }
 
   if (loading) return <LoadingSpinner message="Cargando panel..." />
 
@@ -148,9 +158,9 @@ export default function AdminPage() {
         <>
           <div className="flex gap-1 bg-gray-100 p-1 rounded-lg w-fit mb-5">
             {[
-              { key: 'pending',  label: 'Pendientes' },
-              { key: 'approved', label: 'Aprobadas'  },
-              { key: 'all',      label: 'Todas'       },
+              { key: 'Pendiente', label: 'Pendientes' },
+              { key: 'Aprobado',  label: 'Aprobadas'  },
+              { key: 'all',       label: 'Todas'       },
             ].map(t => (
               <button key={t.key} onClick={() => setResTab(t.key)}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
@@ -169,7 +179,7 @@ export default function AdminPage() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-gray-50 border-b border-surface-border">
-                      {['Espacio', 'Usuario', 'Rol', 'Fecha', 'Horario', 'Estado', 'Acciones'].map(h => (
+                      {['Espacio', 'Usuario', 'Fecha', 'Horario', 'Asistentes', 'Estado', 'Acciones'].map(h => (
                         <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">
                           {h}
                         </th>
@@ -178,26 +188,31 @@ export default function AdminPage() {
                   </thead>
                   <tbody className="divide-y divide-surface-border">
                     {reservations.map(r => {
-                      const space = state.spaces.find(s => s.id === r.spaceId)
-                      const user  = users.find(u => u.id === r.userId)
+                      const space = state.spaces.find(s => s.id === r.id_espacio)
                       return (
                         <tr key={r.id} className="hover:bg-gray-50 transition-colors">
-                          <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap max-w-[140px] truncate">{space?.name}</td>
-                          <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{user?.name}</td>
-                          <td className="px-4 py-3">
-                            <span className={`badge ${ROLE_COLORS[user?.role]}`}>{ROLE_LABELS[user?.role]}</span>
+                          <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap max-w-[140px] truncate">
+                            {space?.nombre ?? r.espacio?.nombre ?? '—'}
                           </td>
-                          <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{r.date}</td>
-                          <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{r.startTime} – {r.endTime}</td>
-                          <td className="px-4 py-3"><StatusBadge status={r.status} /></td>
+                          <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
+                            {r.usuario_perfil?.nombre_completo ?? '—'}
+                          </td>
+                          <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{r.fecha}</td>
+                          <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
+                            {r.hora_inicio} – {r.hora_fin}
+                          </td>
+                          <td className="px-4 py-3 text-gray-600 text-center">{r.asistentes}</td>
                           <td className="px-4 py-3">
-                            {r.status === 'pending' && (
+                            <StatusBadge status={ESTADO_MAP[r.estado] ?? 'pending'} />
+                          </td>
+                          <td className="px-4 py-3">
+                            {r.estado === 'Pendiente' && (
                               <div className="flex gap-2">
-                                <button onClick={() => handleReservationAction(r.id, 'approved')}
+                                <button onClick={() => handleReservationAction(r.id, 'Aprobado')}
                                   className="px-2.5 py-1 bg-emerald-600 text-white text-xs rounded-lg hover:bg-emerald-700 transition-colors">
                                   Aprobar
                                 </button>
-                                <button onClick={() => handleReservationAction(r.id, 'rejected')}
+                                <button onClick={() => handleReservationAction(r.id, 'Rechazado')}
                                   className="px-2.5 py-1 bg-red-100 text-red-700 text-xs rounded-lg hover:bg-red-200 transition-colors">
                                   Rechazar
                                 </button>
@@ -245,12 +260,12 @@ export default function AdminPage() {
                   <tbody className="divide-y divide-surface-border">
                     {state.spaces.map(s => (
                       <tr key={s.id} className="hover:bg-gray-50 transition-colors">
-                        <td className="px-4 py-3 font-medium text-gray-900 max-w-[160px] truncate">{s.name}</td>
-                        <td className="px-4 py-3 text-gray-600 capitalize">{s.type}</td>
-                        <td className="px-4 py-3 text-gray-600">{s.capacity}</td>
-                        <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{s.building}</td>
+                        <td className="px-4 py-3 font-medium text-gray-900 max-w-[160px] truncate">{s.nombre}</td>
+                        <td className="px-4 py-3 text-gray-600 capitalize">{s.tipo}</td>
+                        <td className="px-4 py-3 text-gray-600">{s.capacidad}</td>
+                        <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{s.edificio}</td>
                         <td className="px-4 py-3">
-                          {s.requiresApproval
+                          {s.requiere_aprobacion
                             ? <span className="badge bg-amber-100 text-amber-700">Sí</span>
                             : <span className="badge bg-gray-100 text-gray-600">No</span>
                           }
@@ -284,7 +299,7 @@ export default function AdminPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gray-50 border-b border-surface-border">
-                  {['Nombre', 'Correo', 'Rol', 'No-shows', 'Estado', 'Reservas activas'].map(h => (
+                  {['Nombre', 'Correo', 'Rol', 'No-shows', 'Estado'].map(h => (
                     <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">
                       {h}
                     </th>
@@ -293,20 +308,19 @@ export default function AdminPage() {
               </thead>
               <tbody className="divide-y divide-surface-border">
                 {users.map(u => {
-                  const activeRes = state.reservations.filter(
-                    r => r.userId === u.id && ['pending', 'approved'].includes(r.status)
-                  ).length
-                  const isBlocked = u.blockedUntil && new Date() < new Date(u.blockedUntil)
+                  const isBlocked = u.bloqueado_hasta && new Date() < new Date(u.bloqueado_hasta)
                   return (
                     <tr key={u.id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-4 py-3 font-medium text-gray-900">{u.name}</td>
+                      <td className="px-4 py-3 font-medium text-gray-900">{u.nombre_completo}</td>
                       <td className="px-4 py-3 text-gray-600">{u.email}</td>
                       <td className="px-4 py-3">
-                        <span className={`badge ${ROLE_COLORS[u.role]}`}>{ROLE_LABELS[u.role]}</span>
+                        <span className={`badge ${ROLE_COLORS[u.rol] ?? 'bg-gray-100 text-gray-600'}`}>
+                          {ROLE_LABELS[u.rol] ?? u.rol}
+                        </span>
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <span className={`font-medium ${u.noShows >= 2 ? 'text-red-600' : 'text-gray-700'}`}>
-                          {u.noShows}
+                        <span className={`font-medium ${u.no_shows >= 2 ? 'text-red-600' : 'text-gray-700'}`}>
+                          {u.no_shows}
                         </span>
                       </td>
                       <td className="px-4 py-3">
@@ -315,7 +329,6 @@ export default function AdminPage() {
                           : <span className="badge bg-emerald-100 text-emerald-700">Activo</span>
                         }
                       </td>
-                      <td className="px-4 py-3 text-center text-gray-700">{activeRes}</td>
                     </tr>
                   )
                 })}
@@ -352,7 +365,7 @@ export default function AdminPage() {
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleDeleteSpace}
         title="Eliminar espacio"
-        message={`¿Estás seguro de que deseas eliminar "${deleteTarget?.name}"? Esta acción no se puede deshacer y eliminará el espacio del sistema.`}
+        message={`¿Estás seguro de que deseas eliminar "${deleteTarget?.nombre}"?`}
         confirmLabel="Sí, eliminar"
         danger
       />

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
-import { getUserByEmail, createUser } from '../services/api'
+import { registerApi } from '../services/auth'
 
 export default function RegisterPage() {
   const { dispatch } = useApp()
@@ -29,38 +29,33 @@ export default function RegisterPage() {
     return e
   }
 
-  const handleSubmit = async (ev) => {
-    ev.preventDefault()
-    const e = validate()
-    if (Object.keys(e).length) return setErrors(e)
-    setLoading(true)
-    setServerError('')
-    try {
-      // Verificar si el correo ya existe
-      const existing = await getUserByEmail(form.email)
-      if (existing) {
-        setServerError('Ya existe una cuenta con ese correo.')
-        return
-      }
-      const newUser = {
-        id: `u-${Date.now()}`,
-        name: form.name.trim(),
-        email: form.email,
-        password: form.password,
-        role: 'student',
-        noShows: 0,
+const handleSubmit = async (ev) => {
+  ev.preventDefault()
+  const e = validate()
+  if (Object.keys(e).length) return setErrors(e)
+  setLoading(true)
+  setServerError('')
+  try {
+    const data = await registerApi(form.name.trim(), form.email, form.password)
+
+    dispatch({
+      type: 'LOGIN_SUCCESS',
+      payload: {
+        id:           data.usuario_perfil_id,
+        name:         data.nombre_completo,
+        email:        data.email,
+        role:         data.rol.toLowerCase(),
+        noShows:      0,
         blockedUntil: null,
       }
-      const saved = await createUser(newUser)
-      localStorage.setItem('sf_user', JSON.stringify(saved))
-      dispatch({ type: 'LOGIN_SUCCESS', payload: saved })
-      navigate('/espacios')
-    } catch {
-      setServerError('No se pudo conectar al servidor. Verifica que JSON Server esté corriendo.')
-    } finally {
-      setLoading(false)
-    }
+    })
+    navigate('/espacios')
+  } catch (err) {
+    setServerError(err.message)
+  } finally {
+    setLoading(false)
   }
+}
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-950 to-brand-800 flex items-center justify-center p-4">
