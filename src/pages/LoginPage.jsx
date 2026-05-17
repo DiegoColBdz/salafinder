@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
-import { getUserByEmail } from '../services/api'
+//import { getUserByEmail } from '../services/api'
+import { loginApi } from '../services/auth'
 
 export default function LoginPage() {
   const { dispatch } = useApp()
@@ -19,27 +20,35 @@ export default function LoginPage() {
     return e
   }
 
-  const handleSubmit = async (ev) => {
-    ev.preventDefault()
-    const e = validate()
-    if (Object.keys(e).length) return setErrors(e)
-    setLoading(true)
-    setServerError('')
-    try {
-      const user = await getUserByEmail(form.email)
-      if (!user || user.password !== form.password) {
-        setServerError('Correo o contraseña incorrectos.')
-        return
+const handleSubmit = async (ev) => {
+  ev.preventDefault()
+  const e = validate()
+  if (Object.keys(e).length) return setErrors(e)
+  setLoading(true)
+  setServerError('')
+  try {
+    const data = await loginApi(form.email, form.password)
+
+    // El token ya quedó en sessionStorage dentro de loginApi
+    // Guardamos el usuario en el Context
+    dispatch({
+      type: 'LOGIN_SUCCESS',
+      payload: {
+        id:             data.usuario_perfil_id,
+        name:           data.nombre_completo,
+        email:          data.email,
+        role:           data.rol.toLowerCase(), // 'student', 'staff', 'admin'
+        noShows:        0,
+        blockedUntil:   null,
       }
-      localStorage.setItem('sf_user', JSON.stringify(user))
-      dispatch({ type: 'LOGIN_SUCCESS', payload: user })
-      navigate('/espacios')
-    } catch {
-      setServerError('No se pudo conectar al servidor. Verifica que JSON Server esté corriendo.')
-    } finally {
-      setLoading(false)
-    }
+    })
+    navigate('/espacios')
+  } catch (err) {
+    setServerError(err.message)
+  } finally {
+    setLoading(false)
   }
+}
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-950 to-brand-800 flex items-center justify-center p-4">

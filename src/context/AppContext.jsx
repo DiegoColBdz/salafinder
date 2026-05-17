@@ -57,21 +57,24 @@ function appReducer(state, action) {
         }
 
         case 'CANCEL_RESERVATION': {
-            const updated = state.reservations.map(r => r.id === action.payload ? { ...r, status: 'cancelled' } : r)
-            localStorage.setItem('sf_reservations', JSON.stringify(updated))
-            return { ...state, reservations: updated, notification: { type: 'info', message: 'Reserva cancelada.' } }
+        const updated = state.reservations.map(r =>
+            r.id === action.payload ? { ...r, estado: 'Cancelado' } : r
+        )
+        return { ...state, reservations: updated }
         }
 
         case 'APPROVE_RESERVATION': {
-            const updated = state.reservations.map(r => r.id === action.payload ? { ...r, status: 'approved' } : r)
-            localStorage.setItem('sf_reservations', JSON.stringify(updated))
-            return { ...state, reservations: updated, notification: { type: 'success', message: 'Reserva aprobada.' } }
+        const updated = state.reservations.map(r =>
+            r.id === action.payload ? { ...r, estado: 'Aprobado' } : r
+        )
+        return { ...state, reservations: updated }
         }
 
         case 'REJECT_RESERVATION': {
-            const updated = state.reservations.map(r => r.id === action.payload ? { ...r, status: 'rejected' } : r)
-            localStorage.setItem('sf_reservations', JSON.stringify(updated))
-            return { ...state, reservations: updated, notification: { type: 'info', message: 'Reserva rechazada.' } }
+        const updated = state.reservations.map(r =>
+            r.id === action.payload ? { ...r, estado: 'Rechazado' } : r
+        )
+        return { ...state, reservations: updated }
         }
 
         case 'CLEAR_NOTIFICATION':

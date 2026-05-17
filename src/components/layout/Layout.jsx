@@ -1,6 +1,7 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
 import { useState } from 'react'
+import { logoutApi } from '../../services/auth'
 
 const ROLE_LABELS = { student: 'Estudiante', staff: 'Docente', admin: 'Administrador' }
 const ROLE_COLORS = {
@@ -16,6 +17,7 @@ export default function Layout() {
     const user = state.currentUser
 
     const handleLogout = () => {
+        logoutApi() // Remueve el token del sessionStorage
         dispatch({ type: 'LOGOUT' })
         navigate('/login')
     }
