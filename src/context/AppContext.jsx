@@ -23,8 +23,8 @@ function appReducer(state, action) {
                 ...state,
                 currentUser: action.payload,
                 notification: { type: 'success', message: `Bienvenido, ${action.payload.name}!` }
+            }
         }
-    }
 
         case 'REGISTER': {
             const exists = state.users.find(u => u.email === action.payload.email)
