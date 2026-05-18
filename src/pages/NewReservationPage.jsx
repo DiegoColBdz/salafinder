@@ -62,8 +62,8 @@ export default function NewReservationPage() {
         const count = parseInt(form.attendeeCount)
         if (!form.attendeeCount) e.attendeeCount = 'Indica el número de asistentes.'
         else if (count < 1) e.attendeeCount = 'Debe haber al menos 1 asistente.'
-        else if (count > space.capacity)
-            e.attendeeCount = `Máximo ${space.capacity} personas en este espacio.`
+        else if (count > space.capacidad)
+            e.attendeeCount = `Máximo ${space.capacidad} personas en este espacio.`
         return e
     }
 
@@ -94,7 +94,7 @@ export default function NewReservationPage() {
                 endTime: form.endTime,
                 purpose: form.purpose,
                 attendeeCount: parseInt(form.attendeeCount),
-                status: space.requiresApproval ? 'pending' : 'approved',
+                status: space.requiere_aprobacion ? 'pending' : 'approved',
                 createdAt: new Date().toISOString(),
             }
             const saved = await createReservation(newRes)
@@ -124,8 +124,8 @@ export default function NewReservationPage() {
 
             <h1 className="font-display font-bold text-2xl text-gray-900 mb-1">Nueva reserva</h1>
             <p className="text-sm text-gray-500 mb-6">
-                <span className="font-medium text-gray-700">{space.name}</span> · {space.building} · Cap. {space.capacity}
-                {space.requiresApproval && <span className="ml-2 badge bg-amber-100 text-amber-700">Requiere aprobación</span>}
+                <span className="font-medium text-gray-700">{space.name}</span> · {space.building} · Cap. {space.capacidad}
+                {space.requiere_aprobacion && <span className="ml-2 badge bg-amber-100 text-amber-700">Requiere aprobación</span>}
             </p>
 
             {blocked && <BlockedUserBanner user={user} />}
@@ -196,10 +196,10 @@ export default function NewReservationPage() {
 
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5" htmlFor="attendeeCount">
-                        Número de asistentes * <span className="text-gray-400 font-normal">(máx. {space.capacity})</span>
+                        Número de asistentes * <span className="text-gray-400 font-normal">(máx. {space.capacidad})</span>
                     </label>
-                    <input id="attendeeCount" type="number" min={1} max={space.capacity}
-                        placeholder={`1 – ${space.capacity}`} value={form.attendeeCount}
+                    <input id="attendeeCount" type="number" min={1} max={space.capacidad}
+                        placeholder={`1 – ${space.capacidad}`} value={form.attendeeCount}
                         onChange={set('attendeeCount')} disabled={blocked || limitReached}
                         className={`input-field ${errors.attendeeCount ? 'input-error' : ''} disabled:opacity-50 disabled:cursor-not-allowed`} />
                     {errors.attendeeCount && <p className="text-xs text-red-600 mt-1">{errors.attendeeCount}</p>}
@@ -208,7 +208,7 @@ export default function NewReservationPage() {
                 <div className="flex gap-3 pt-2">
                     <button type="submit" className="btn-primary flex-1"
                         disabled={!!conflictInfo || blocked || limitReached || loading}>
-                        {loading ? 'Guardando...' : space.requiresApproval ? 'Enviar solicitud' : 'Confirmar reserva'}
+                        {loading ? 'Guardando...' : space.requiere_aprobacion ? 'Enviar solicitud' : 'Confirmar reserva'}
                     </button>
                     <button type="button" onClick={() => navigate(-1)} className="btn-secondary">
                         Cancelar

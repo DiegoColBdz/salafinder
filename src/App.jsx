@@ -28,6 +28,13 @@ function GuestRoute({ children }) {
     return !state.currentUser ? children : <Navigate to="/espacios" replace />
 }
 
+function StudentRoute({ children }) {
+    const { state } = useApp()
+    if (!state.currentUser) return <Navigate to="/login" replace />
+    if (state.currentUser.role === 'admin') return <Navigate to="/espacios" replace />
+    return children
+}
+
 export default function App() {
     return (
         <>
@@ -39,8 +46,8 @@ export default function App() {
                     <Route index element={<Navigate to="/espacios" replace />} />
                     <Route path="/espacios" element={<SpacesPage />} />
                     <Route path="/espacios/:id" element={<SpaceDetailPage />} />
-                    <Route path="/reservar/:id" element={<NewReservationPage />} />
-                    <Route path="/mis-reservas" element={<MyReservationsPage />} />
+                    <Route path="/reservar/:id" element={<StudentRoute><NewReservationPage /></StudentRoute>} />
+                    <Route path="/mis-reservas" element={<StudentRoute><MyReservationsPage /></StudentRoute>} />
                     <Route path="/calendario" element={<CalendarPage />} />
                     <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
                 </Route>

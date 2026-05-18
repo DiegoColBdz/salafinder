@@ -46,8 +46,8 @@ export default function CalendarPage() {
                                 : 'bg-white text-gray-600 border-surface-border hover:border-brand-300 hover:bg-brand-50'
                                 }`}
                         >
-                            <span className="text-xl">{TYPE_ICONS[s.type]}</span>
-                            <span className="text-center leading-tight line-clamp-2">{s.name}</span>
+                            <span className="text-xl">{TYPE_ICONS[s.tipo]}</span>
+                            <span className="text-center leading-tight line-clamp-2">{s.nombre}</span>
                         </button>
                     ))}
                 </div>
@@ -59,8 +59,8 @@ export default function CalendarPage() {
                     <div>
                         <h2 className="font-display font-bold text-lg text-gray-900">{space.name}</h2>
                         <p className="text-xs text-gray-500">
-                            {space.building} · Cap. {space.capacity} personas
-                            {space.requiresApproval &&
+                            {space.edificio} · Cap. {space.capacidad} personas
+                            {space.requiere_aprobacion &&
                                 <span className="ml-2 badge bg-amber-100 text-amber-700">Requiere aprobación</span>
                             }
                         </p>

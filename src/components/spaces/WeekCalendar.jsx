@@ -1,11 +1,12 @@
 import { useState } from 'react'
+import { useApp } from '../../context/AppContext'
 import { useNavigate } from 'react-router-dom'
 
 const HOURS = Array.from({ length: 15 }, (_, i) => `${String(i + 7).padStart(2, '0')}:00`)
 
 const STATUS_COLORS = {
-    approved: 'bg-red-100 border-red-300 text-red-700',
-    pending: 'bg-yellow-100 border-yellow-300 text-yellow-700',
+    Aprobado: 'bg-red-100 border-red-300 text-red-700',
+    Pendiente: 'bg-yellow-100 border-yellow-300 text-yellow-700',
 }
 
 function getWeekDays(baseDate) {
@@ -23,7 +24,10 @@ function getWeekDays(baseDate) {
 }
 
 function toDateStr(date) {
-    return date.toISOString().split('T')[0]
+    const y = date.getFullYear()
+    const m = String(date.getMonth() + 1).padStart(2, '0')
+    const d = String(date.getDate()).padStart(2, '0')
+    return `${y}-${m}-${d}`
 }
 
 function timeToMinutes(time) {
@@ -36,6 +40,8 @@ export default function WeekCalendar({ spaceId, reservations }) {
     const [baseDate, setBaseDate] = useState(new Date())
     const weekDays = getWeekDays(baseDate)
     const todayStr = toDateStr(new Date())
+    const { state } = useApp()
+    const isAdmin = state.currentUser?.role == 'admin'
 
     const prevWeek = () => {
         const d = new Date(baseDate)
@@ -53,17 +59,17 @@ export default function WeekCalendar({ spaceId, reservations }) {
 
     // Reservas activas del espacio
     const activeRes = reservations.filter(r =>
-        r.spaceId === spaceId && ['approved', 'pending'].includes(r.status)
+        r.id_espacio === spaceId &&
+        (r.estado === 'Aprobado' || r.estado === 'Pendiente')
     )
 
-    // Obtener reservas que ocupan una celda hora/día
     const getResForCell = (dayStr, hour) => {
         const cellStart = timeToMinutes(hour)
         const cellEnd = cellStart + 60
         return activeRes.filter(r => {
-            if (r.date !== dayStr) return false
-            const resStart = timeToMinutes(r.startTime)
-            const resEnd = timeToMinutes(r.endTime)
+            if (r.fecha !== dayStr) return false
+            const resStart = timeToMinutes(r.hora_inicio)
+            const resEnd = timeToMinutes(r.hora_fin)
             return resStart < cellEnd && resEnd > cellStart
         })
     }
@@ -147,13 +153,13 @@ export default function WeekCalendar({ spaceId, reservations }) {
                                                 {cellRes.length > 0 ? (
                                                     cellRes.map(r => (
                                                         <div key={r.id}
-                                                            className={`rounded border px-1.5 py-0.5 text-xs leading-tight truncate cursor-default ${STATUS_COLORS[r.status]}`}
-                                                            title={`${r.startTime}–${r.endTime} · ${r.purpose}`}
+                                                            className={`rounded border px-1.5 py-0.5 text-xs leading-tight truncate cursor-default ${STATUS_COLORS[r.estado]}`}
+                                                            title={`${r.hora_inicio?.slice(0, 5)}–${r.hora_fin?.slice(0, 5)} · ${r.proposito}`}
                                                         >
-                                                            {r.startTime}–{r.endTime}
+                                                            {r.hora_inicio?.slice(0, 5)}–{r.hora_fin?.slice(0, 5)}
                                                         </div>
                                                     ))
-                                                ) : !isPast ? (
+                                                ) : !isPast && !isAdmin ? (
                                                     <button
                                                         onClick={() => navigate(`/reservar/${spaceId}`)}
                                                         className="w-full h-full rounded hover:bg-emerald-50 hover:border hover:border-emerald-200 transition-colors group"

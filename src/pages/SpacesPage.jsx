@@ -20,18 +20,21 @@ export default function SpacesPage() {
         if (spaces) dispatch({ type: 'SET_SPACES', payload: spaces })
     }, [spaces])
 
-    const buildings = spaces ? [...new Set(spaces.map(s => s.building))] : []
-    const resources = spaces ? [...new Set(spaces.flatMap(s => s.resources))] : []
+    const buildings = spaces ? [...new Set(spaces.map(s => s.edificio))] : []
+    const resources = spaces ? [...new Set(spaces.flatMap(s => s.recursos || []))] : []
 
     const filtered = useMemo(() => {
         if (!spaces) return []
         return spaces.filter(s => {
-            if (filters.type && s.type !== filters.type) return false
-            if (filters.capacity && s.capacity < parseInt(filters.capacity)) return false
-            if (filters.building && s.building !== filters.building) return false
-            if (filters.resource && !s.resources.includes(filters.resource)) return false
-            if (search && !s.name.toLowerCase().includes(search.toLowerCase()) &&
-                !s.building.toLowerCase().includes(search.toLowerCase())) return false
+            if (filters.type && s.tipo !== filters.type) return false
+            if (filters.capacity && s.capacidad < parseInt(filters.capacity)) return false
+            if (filters.building && s.edificio !== filters.building) return false
+            if (filters.resource && !s.recursos?.includes(filters.resource)) return false
+            if (search) {
+                const q = search.toLowerCase()
+                if (!s.nombre?.toLowerCase().includes(q) &&
+                    !s.edificio?.toLowerCase().includes(q)) return false
+            }
             return true
         })
     }, [spaces, filters, search])
