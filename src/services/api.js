@@ -42,26 +42,51 @@ export async function createSpace(data) {
   const res = await fetch(`${BASE_URL}/espacio`, {
     method: 'POST',
     headers: authHeaders(),
-    body: JSON.stringify(data),
+    body: JSON.stringify({
+      nombre:                data.nombre,
+      tipo:                  data.tipo,
+      capacidad:             data.capacidad,
+      edificio:              data.edificio,
+      descripcion:           data.descripcion,
+      recursos:              data.recursos,
+      programas_prioritarios: data.programas_prioritarios,
+      requiere_aprobacion:   data.requiere_aprobacion,
+    }),
   })
   return handleResponse(res)
 }
 
 export async function updateSpace(id, data) {
-  const res = await fetch(`${BASE_URL}/espacio/${id}`, {
+  // El backend recibe el id como query param: PUT /espacio?id=xxx
+  const res = await fetch(`${BASE_URL}/espacio?id=${id}`, {
     method: 'PUT',
     headers: authHeaders(),
-    body: JSON.stringify(data),
+    body: JSON.stringify({
+      nombre:                data.nombre,
+      tipo:                  data.tipo,
+      capacidad:             data.capacidad,
+      edificio:              data.edificio,
+      descripcion:           data.descripcion,
+      recursos:              data.recursos,
+      programas_prioritarios: data.programas_prioritarios,
+      requiere_aprobacion:   data.requiere_aprobacion,
+    }),
   })
   return handleResponse(res)
 }
 
 export async function deleteSpace(id) {
-  const res = await fetch(`${BASE_URL}/espacio/${id}`, {
+  // El backend recibe el id en el body: DELETE /espacio
+  const res = await fetch(`${BASE_URL}/espacio`, {
     method: 'DELETE',
     headers: authHeaders(),
+    body: JSON.stringify({ id }),
   })
-  return handleResponse(res)
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({ message: 'Error al eliminar.' }))
+    throw new Error(error.message)
+  }
+  return true
 }
 
 // ─── Reservations ─────────────────────────────────────────────────────────────
@@ -90,12 +115,17 @@ export async function createReservation(data) {
 }
 
 export async function updateReservation(id, data) {
+  // PUT /reserva/{id} → cambia estado (Admin)
   const res = await fetch(`${BASE_URL}/reserva/${id}`, {
-    method: 'PATCH',
+    method: 'PUT',
     headers: authHeaders(),
-    body: JSON.stringify({ estado: data.status }),
+    body: JSON.stringify({ estado: data.estado }),
   })
-  return handleResponse(res)
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({ message: 'Error al actualizar.' }))
+    throw new Error(error.message)
+  }
+  return true
 }
 
 export async function cancelReservation(id) {
