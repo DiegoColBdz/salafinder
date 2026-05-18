@@ -1,11 +1,16 @@
 import { useState } from 'react'
 import { SPACE_TYPES, RESOURCES_LIST } from '../../data/mockData'
 
-const EMPTY_FORM = {
-  name: '', type: 'sala', capacity: '', building: '',
-  description: '', requiresApproval: false,
-  resources: [], allowedPrograms: [],
-}
+  const EMPTY_FORM = {
+    nombre: '',
+    tipo: 'sala',
+    capacidad: '',
+    edificio: '',
+    descripcion: '',
+    requiere_aprobacion: false,
+    recursos: [],
+    programas_prioritarios: [],
+  }
 
 export default function SpaceForm({ initial = EMPTY_FORM, onSubmit, onCancel, loading }) {
   const [form, setForm]   = useState(initial)
@@ -55,7 +60,16 @@ export default function SpaceForm({ initial = EMPTY_FORM, onSubmit, onCancel, lo
     ev.preventDefault()
     const e = validate()
     if (Object.keys(e).length) return setErrors(e)
-    onSubmit({ ...form, capacity: parseInt(form.capacity) })
+    onSubmit({
+      nombre:                form.nombre,
+      tipo:                  form.tipo,
+      capacidad:             parseInt(form.capacidad),
+      edificio:              form.edificio,
+      descripcion:           form.descripcion,
+      recursos:              form.recursos,
+      programas_prioritarios: form.programas_prioritarios,
+      requiere_aprobacion:   form.requiere_aprobacion,
+    })
   }
 
   return (
