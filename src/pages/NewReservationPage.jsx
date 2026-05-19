@@ -101,8 +101,8 @@ export default function NewReservationPage() {
             dispatch({ type: 'ADD_RESERVATION_SUCCESS', payload: saved })
             setSubmitted(true)
             setTimeout(() => navigate('/mis-reservas'), 1500)
-        } catch {
-            dispatch({ type: 'SET_NOTIFICATION', payload: { type: 'error', message: 'Error al crear la reserva. Intenta de nuevo.' } })
+        } catch (err) {
+            dispatch({ type: 'SET_NOTIFICATION', payload: { type: 'error', message: err.message || 'Error al crear la reserva. Intenta de nuevo.' } })
         } finally {
             setLoading(false)
         }
@@ -124,7 +124,7 @@ export default function NewReservationPage() {
 
             <h1 className="font-display font-bold text-2xl text-gray-900 mb-1">Nueva reserva</h1>
             <p className="text-sm text-gray-500 mb-6">
-                <span className="font-medium text-gray-700">{space.name}</span> · {space.building} · Cap. {space.capacidad}
+                <span className="font-medium text-gray-700">{space.nombre}</span> · {space.edificio} · Cap. {space.capacidad}
                 {space.requiere_aprobacion && <span className="ml-2 badge bg-amber-100 text-amber-700">Requiere aprobación</span>}
             </p>
 

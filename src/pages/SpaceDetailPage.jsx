@@ -76,7 +76,7 @@ export default function SpaceDetailPage() {
                     </div>
                 )}
 
-                {state.currentUser?.role !== 'admin' && (
+                {state.currentUser?.role === 'student' && (
                     <div className="mt-6">
                         <button onClick={() => navigate(`/reservar/${space.id}`)} className="btn-primary">
                             Reservar este espacio

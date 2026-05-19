@@ -20,7 +20,7 @@ const ROLE_COLORS = {
     Staff: 'bg-emerald-100 text-emerald-700',
     Admin: 'bg-violet-100 text-violet-700',
 }
-const ROLE_LABELS = { Student: 'Estudiante', Staff: 'Docente', Admin: 'Admin' }
+const ROLE_LABELS = { Student: 'Estudiante', Staff: 'Staff', Admin: 'Admin' }
 
 const ESTADO_MAP = {
     Pendiente: 'pending',
@@ -380,7 +380,7 @@ export default function AdminPage() {
                                                                 onClick={() => askCambiarRol(u, 'Staff')}
                                                                 className="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs rounded-lg hover:bg-emerald-100 transition-colors"
                                                             >
-                                                                → Docente
+                                                                → Staff
                                                             </button>
                                                         )}
                                                     </div>

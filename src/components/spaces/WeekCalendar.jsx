@@ -41,7 +41,7 @@ export default function WeekCalendar({ spaceId, reservations }) {
     const weekDays = getWeekDays(baseDate)
     const todayStr = toDateStr(new Date())
     const { state } = useApp()
-    const isAdmin = state.currentUser?.role == 'admin'
+    const isStudent = state.currentUser?.role?.toLowerCase() === "student"
 
     const prevWeek = () => {
         const d = new Date(baseDate)
@@ -159,7 +159,7 @@ export default function WeekCalendar({ spaceId, reservations }) {
                                                             {r.hora_inicio?.slice(0, 5)}–{r.hora_fin?.slice(0, 5)}
                                                         </div>
                                                     ))
-                                                ) : !isPast && !isAdmin ? (
+                                                ) : !isPast && !isStudent ? (
                                                     <button
                                                         onClick={() => navigate(`/reservar/${spaceId}`)}
                                                         className="w-full h-full rounded hover:bg-emerald-50 hover:border hover:border-emerald-200 transition-colors group"

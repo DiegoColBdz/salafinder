@@ -3,7 +3,7 @@ import { useApp } from '../../context/AppContext'
 import { useState } from 'react'
 import { logoutApi } from '../../services/auth'
 
-const ROLE_LABELS = { student: 'Estudiante', staff: 'Docente', admin: 'Administrador' }
+const ROLE_LABELS = { student: 'Estudiante', staff: 'Staff', admin: 'Administrador' }
 const ROLE_COLORS = {
     student: 'bg-blue-100 text-blue-700',
     staff: 'bg-emerald-100 text-emerald-700',
@@ -22,14 +22,18 @@ export default function Layout() {
         navigate('/login')
     }
 
+    const role = user?.role?.toLowerCase()
+
     const navItems = [
-        { to: '/espacios',     label: 'Espacios',     icon: '' },
-        { to: '/calendario',   label: 'Calendario',   icon: '' },
-        { to: '/mis-reservas', label: 'Mis Reservas', icon: '' },
-        ...(user?.role?.toLowerCase() === 'staff'
+        { to: '/espacios', label: 'Espacios', icon: '' },
+        { to: '/calendario', label: 'Calendario', icon: '' },
+        ...(role === 'student'
+            ? [{ to: '/mis-reservas', label: 'Mis Reservas', icon: '' }]
+            : []),
+        ...(role === 'staff'
             ? [{ to: '/staff', label: 'Panel Staff', icon: '' }]
             : []),
-        ...(user?.role?.toLowerCase() === 'admin'
+        ...(role === 'admin'
             ? [{ to: '/admin', label: 'Panel Admin', icon: '' }]
             : []),
     ]

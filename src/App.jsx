@@ -32,16 +32,16 @@ function GuestRoute({ children }) {
 function StudentRoute({ children }) {
     const { state } = useApp()
     if (!state.currentUser) return <Navigate to="/login" replace />
-    if (state.currentUser.role === 'admin') return <Navigate to="/espacios" replace />
+    if (state.currentUser.role !== 'student') return <Navigate to="/espacios" replace />
     return children
 }
 
 function StaffRoute({ children }) {
-  const { state } = useApp()
-  if (!state.currentUser) return <Navigate to="/login" replace />
-  if (state.currentUser.role.toLowerCase() !== 'staff')
-    return <Navigate to="/espacios" replace />
-  return children
+    const { state } = useApp()
+    if (!state.currentUser) return <Navigate to="/login" replace />
+    if (state.currentUser.role.toLowerCase() !== 'staff')
+        return <Navigate to="/espacios" replace />
+    return children
 }
 
 export default function App() {
