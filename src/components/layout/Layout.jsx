@@ -23,10 +23,15 @@ export default function Layout() {
     }
 
     const navItems = [
-        { to: '/espacios', label: 'Espacios', icon: '' },
-        { to: '/calendario', label: 'Calendario', icon: '' },
-        ...(user?.role !== 'admin' ? [{ to: '/mis-reservas', label: 'Mis Reservas', icon: '' }] : []),
-        ...(user?.role === 'admin' ? [{ to: '/admin', label: 'Panel Admin', icon: '' }] : []),
+        { to: '/espacios',     label: 'Espacios',     icon: '' },
+        { to: '/calendario',   label: 'Calendario',   icon: '' },
+        { to: '/mis-reservas', label: 'Mis Reservas', icon: '' },
+        ...(user?.role?.toLowerCase() === 'staff'
+            ? [{ to: '/staff', label: 'Panel Staff', icon: '' }]
+            : []),
+        ...(user?.role?.toLowerCase() === 'admin'
+            ? [{ to: '/admin', label: 'Panel Admin', icon: '' }]
+            : []),
     ]
 
     return (

@@ -161,3 +161,25 @@ export async function cambiarRol(usuario_perfil_id, nuevo_rol) {
   return handleResponse(res);
 }
 
+// ─── Staff ────────────────────────────────────────────────────────────
+
+export async function getStudents() {
+  const res = await fetch(`${BASE_URL}/usuarioperfil/students`, {
+    headers: authHeaders(),
+  });
+  return handleResponse(res);
+}
+
+
+export async function registrarNoShow(usuario_perfil_id) {
+  const res = await fetch(`${BASE_URL}/UsuarioPerfil/registrar_no_show`, {
+    method: 'PATCH',
+    headers: authHeaders(),
+    body: JSON.stringify({ id: usuario_perfil_id }),
+  })
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({ message: 'Error al registrar no-show.' }))
+    throw new Error(error.message)
+  }
+  return res.json()
+}

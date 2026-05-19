@@ -10,6 +10,7 @@ import NewReservationPage from './pages/NewReservationPage'
 import MyReservationsPage from './pages/MyReservationsPage'
 import AdminPage from './pages/AdminPage'
 import CalendarPage from './pages/CalendarPage'
+import StaffPage from './pages/StaffPage'
 
 function PrivateRoute({ children }) {
     const { state } = useApp()
@@ -35,6 +36,14 @@ function StudentRoute({ children }) {
     return children
 }
 
+function StaffRoute({ children }) {
+  const { state } = useApp()
+  if (!state.currentUser) return <Navigate to="/login" replace />
+  if (state.currentUser.role.toLowerCase() !== 'staff')
+    return <Navigate to="/espacios" replace />
+  return children
+}
+
 export default function App() {
     return (
         <>
@@ -50,6 +59,7 @@ export default function App() {
                     <Route path="/mis-reservas" element={<StudentRoute><MyReservationsPage /></StudentRoute>} />
                     <Route path="/calendario" element={<CalendarPage />} />
                     <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
+                    <Route path="/staff" element={<StaffRoute><StaffPage /></StaffRoute>} />
                 </Route>
                 <Route path="*" element={<Navigate to="/espacios" replace />} />
             </Routes>
